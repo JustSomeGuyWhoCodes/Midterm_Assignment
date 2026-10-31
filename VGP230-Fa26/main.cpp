@@ -3,585 +3,391 @@
 #include <cmath>
 #include <raymath.h>
 
-void FirstDrawing()
+
+void SpiroGraphCirclesDrawn()
 {
+		int wh = 800; // since width and height are same number, use same variable for both
+
+		InitWindow(wh, wh, "Spirograph");
+		SetTargetFPS(60);
+
+		//set both circles in same spot to set up with one smaller than other so it's inside it
+
+		float xCoordinate = wh / 2;
+		float yCoordinate = wh / 2;
+
+		float outer = 200; // large (outer) circle radius
+		float inner = 75;  // small (outer) circle radius
+		float distance = outer - inner;
+
+		float angle = 0;
+		float speed = 1;
+
+		while (!WindowShouldClose())
+		{
+
+			float innerX = xCoordinate + cos(DEG2RAD * angle) * (distance);
+			float innerY = yCoordinate - sin(DEG2RAD * angle) * (distance);
 
 
-	InitWindow(500, 500, "My Cool Game");
-	SetTargetFPS(60);
+			BeginDrawing();
+			ClearBackground(RAYWHITE);
 
-	while (!WindowShouldClose())
-	{
+			DrawCircleLines(xCoordinate, yCoordinate, outer, RED);
 
-		BeginDrawing();
-		ClearBackground(RAYWHITE); // hold ctrl and click on any of these function things to see the header or something so in there we can see the list of things like commands like draw and what we can draw
+			DrawCircleLines(xCoordinate + (outer - inner), yCoordinate, inner, BLUE);
+			// outer is used as a valude so the inner circle is created at the border line of the outer circle, then subtract raidus of inner 
+			// to move it properly inside the outer circle
+			// Y coordinate stays the same for now so we can get it onto the same y level
 
-		int r = 150;
+			EndDrawing();
+		}
 
-		DrawCircle(250, 250, r + 20, BLACK);
-
-		DrawCircle(250, 250, 150, BLUE);
-
-
-
-		std::string text = "Gabriel";
-		int xCen = 500 / 2;
-		int yCen = 500 / 2;
-
-
-		int fontSize = 60;
-		int txtWidth = MeasureText(text.c_str(), fontSize);
-		int halfTextWidth = txtWidth / 2;
-
-		// font size is height
-		// width is... we didnt catch it
-
-
-		int txtCenX = xCen - halfTextWidth;
-		int txtCenY = yCen - fontSize / 2;
-
-
-
-		//octagon 5 sided shape
-
-		int num = ((360 / 5) / 2) / 2;
-		Vector2 center = Vector2{ (float)xCen, (float)yCen };
-		DrawPoly(center, 5, r, -num, ORANGE);
-
-
-		// rotating by degrees
-		// 360 in a circle
-		// pentagon has 5 corners so divide by 5
-		// its like a bunch of triangles,, so degrees between each triangle is 360/5
-		// each rotation is 72,
-
-
-
-		DrawPolyLinesEx(center, 5, r, -18, 20, BLACK);
-
-		DrawText(text.c_str(), txtCenX, txtCenY, fontSize, RED);
-		// DrawText("Gabriel", 250, 250, 20, RED); // this also works
-
-
-
-
-
-
-
-
-
-
-		EndDrawing();
-	}
-
-
-	CloseWindow();
-
-	// s
+		CloseWindow();
+	
 }
 
 
-
-void TemplateFunc()
+void SpiroGraphInnerDrawingCircleMade()
 {
+	int wh = 800; // since width and height are same number, use same variable for both
 
-
-	InitWindow(500, 500, "My Cool Game");
+	InitWindow(wh, wh, "Spirograph");
 	SetTargetFPS(60);
+
+	//set both circles in same spot to set up with one smaller than other so it's inside it
+
+	float xCoordinate = wh / 2;
+	float yCoordinate = wh / 2;
+
+	float outer = 200; // large (outer) circle radius
+	float inner = 75;  // small (outer) circle radius
+	float distance = outer - inner;
+	float innerDrawCircle = 40;
+
+
+	float angle = 0;
+	float speed = 1;
 
 	while (!WindowShouldClose())
 	{
+
+		float innerX = xCoordinate + cos(DEG2RAD * angle) * (distance);
+		float innerY = yCoordinate - sin(DEG2RAD * angle) * (distance);
+		// use these for the inner circle now
+		// will help calculate the distance using the angle we set
+		// if angle is 0, it is drawn where we originally had it drawn in previous function
+		// a
+
 		BeginDrawing();
 		ClearBackground(RAYWHITE);
 
+		DrawCircleLines(xCoordinate, yCoordinate, outer, RED);
+
+		DrawCircleLines(innerX, innerY, inner, BLUE);		
+		DrawCircle(innerX + innerDrawCircle, innerY, 5, GREEN);
+		// drawing a new circle inside the inner circle for the actual drawing proccess
+
 		EndDrawing();
+		angle += speed;
+		// will change the angle by 1 every loop
 	}
 
-
 	CloseWindow();
+
 }
 
 
 
-void MovingBall()
+void SpiroGraphRotatingCircles()
 {
+	int wh = 800; // since width and height are same number, use same variable for both
 
-	int width = 800;
-	int height = 500;
-	InitWindow(width, height, "Bouncing Ball Game!");
-
-	int r = 50;
-	int speed = 2;
-	int centerX = r;
-	int centerY = height/2;
-
+	InitWindow(wh, wh, "Spirograph");
 	SetTargetFPS(60);
+
+	//set both circles in same spot to set up with one smaller than other so it's inside it
+
+	float xCoordinate = wh / 2;
+	float yCoordinate = wh / 2;
+
+	float outer = 200; // large (outer) circle radius
+	float inner = 75;  // small (outer) circle radius
+	float distance = outer - inner;
+	float innerDrawCircle = 40;
+
+
+	float angle = 0;
+	float speed = 1;
 
 	
-
 	while (!WindowShouldClose())
 	{
+
+		float innerX = xCoordinate + cos(DEG2RAD * angle) * (distance);
+		float innerY = yCoordinate - sin(DEG2RAD * angle) * (distance);
+
+		float drawAngle = -(distance) / inner * angle;
+		// tells us how quickly the green dot needs to rotate relative to the blue circle's movement
+		// the negative sign makes its rotation go in the opposite direction
+
+		// now we do for the inner drawing circle!
+		float drawX = innerX + cos(DEG2RAD * drawAngle) * innerDrawCircle;
+		float drawY = innerY - sin(DEG2RAD * drawAngle) * innerDrawCircle;
+
+		// calculate new angle for inner circle for the drawing part
+
+		
 		BeginDrawing();
 		ClearBackground(RAYWHITE);
 
+		DrawCircleLines(xCoordinate, yCoordinate, outer, RED);
 
-
-		for (int i = 10; i > 0; i--)
-		{
-			//         cenX - Gap - 
-			DrawCircle(centerX - i * speed * 5, centerY, r, Color{ 0,0,255, (unsigned char) (255-25*i) }); // have to cast it because the program doesnt like non direct values here
-		}
-		DrawCircle(centerX, centerY, r, BLUE);
-		centerX += speed;
-
-
+		DrawCircleLines(innerX, innerY, inner, BLUE);
+		DrawCircle(drawX, drawY, 5, GREEN);
+		// replace green circle code with this now
 
 		EndDrawing();
-
-		if (centerX > width + r)
-		{
-			centerX = -r;
-		}
-
-
-		
+		angle += speed;
 	}
 
-
 	CloseWindow();
+
 }
 
 
-void BallsAssignment()
+void SpiroGraphDraw()
 {
+	int wh = 800; // since width and height are same number, use same variable for both
 
-	int width = 500;
-	int height = 500;
-	InitWindow(width, height, "Ball Arena");
-
-	int r = 5;
-	int speedx = 4;
-	int speedY = 8;
-	int centerX = r;
-	int centerY = height / 2;
-
-
-	// red ball
-
-	int redR = 5;
-	int redSpeedx = -2;
-	int redSpeedY = -11;
-	int redCenterX = width - r;
-	int redCenterY = height - (height / 2);
-
+	InitWindow(wh, wh, "Spirograph");
 	SetTargetFPS(60);
 
+	//set both circles in same spot to set up with one smaller than other so it's inside it
+
+	float xCoordinate = wh / 2;
+	float yCoordinate = wh / 2;
+
+	float outer = 200; // large (outer) circle radius
+	float inner = 75;  // small (outer) circle radius
+	float distance = outer - inner;
+	float innerDrawCircle = 40;
 
 
-	bool xPos = true;
-	bool yPos = true;
-
-
-	bool redXPos = true;
-	bool redYPos = true;
-
-
+	float angle = 0;
+	float speed = 1;
 
 	while (!WindowShouldClose())
 	{
+
+		float innerX = xCoordinate + cos(DEG2RAD * angle) * (distance);
+		float innerY = yCoordinate - sin(DEG2RAD * angle) * (distance);
+
+		float drawAngle = -(distance) / inner * angle;
+		// tells us how quickly the green dot needs to rotate relative to the blue circle's movement
+		// the negative sign makes its rotation go in the opposite direction
+
+		// now we do for the inner drawing circle!
+		float drawX = innerX + cos(DEG2RAD * drawAngle) * innerDrawCircle;
+		float drawY = innerY - sin(DEG2RAD * drawAngle) * innerDrawCircle;
+
+		// calculate new angle for inner circle for the drawing part
+
+
 		BeginDrawing();
 		ClearBackground(RAYWHITE);
 
+		float previousX = xCoordinate + distance + innerDrawCircle;
+		float previousY = yCoordinate;
+
+		for (float i = 0; i < angle; i += 1)
+		{
+			float innerX2 = xCoordinate + cos(DEG2RAD * i) * distance;
+			float innerY2 = yCoordinate - sin(DEG2RAD * i) * distance;
+
+			float drawAngle2 = -distance / inner * i;
+
+			float drawX2 = innerX2 + cos(DEG2RAD * drawAngle2) * innerDrawCircle;
+			float drawY2 = innerY2 - sin(DEG2RAD * drawAngle2) * innerDrawCircle;
+
+			DrawLine(previousX, previousY, drawX2, drawY2, GREEN);
+
+			previousX = drawX2;
+			previousY = drawY2;
+		}
+		// loop through all previous angles to redraw the spirograph lines
+		// calculate green dot position at each angle and connect it to previous position
+		// save current position as previous for next loop
+		// keeps all lines visible even though background clears every frame
+
+
+		DrawCircleLines(xCoordinate, yCoordinate, outer, RED);
+
+		DrawCircleLines(innerX, innerY, inner, BLUE);
+		DrawCircle(drawX, drawY, 5, GREEN);
+		// replace green circle code with this now
+
 		
-		DrawCircle(centerX, centerY, r, BLUE);
-		
-		if (xPos == true)
-		{
-			centerX += speedx;
-		}
-		else
-		{
-			centerX -= speedx;
-		}
-
-		if (yPos == true)
-		{
-			centerY+= speedY;
-		}
-		else
-		{
-			centerY -= speedY;
-		}
-		//centerX += speed;
-		//centerY += speed;
-
-
-
-		//EndDrawing();
-
-		if (centerX + r >= width)
-		{
-			xPos = false;
-		}
-		if (centerY + r >= height)
-		{
-			yPos = false;
-		}
-
-
-		if (centerX - r <= 0)
-		{
-			xPos = true;
-		}
-		if (centerY - r <= 0)
-		{
-			yPos = true;
-		}
-
-
-
-		//Red Ball
-
-
-		DrawCircle(redCenterX, redCenterY, redR, RED);
-
-		if (redXPos == true)
-		{
-			redCenterX -= redSpeedx;
-		}
-		else
-		{
-			redCenterX += redSpeedx;
-		}
-
-		if (redYPos == true)
-		{
-			redCenterY -= redSpeedY;
-		}
-		else
-		{
-			redCenterY += redSpeedY;
-		}
-		//centerX += speed;
-		//centerY += speed;
-
-
-
 		EndDrawing();
-
-		if (redCenterX + redR >= width)
-		{
-			redXPos = false;
-		}
-		if (redCenterY + redR >= height)
-		{
-			redYPos = false;
-		}
-
-
-		if (redCenterX - redR <= 0)
-		{
-			redXPos = true;
-		}
-		if (redCenterY - redR <= 0)
-		{
-			redYPos = true;
-		}
-
-
-		/*
-		
-		if ((centerX + r) - (redCenterX - r) <= 0 && ((centerY + r) - (redCenterY - r)) <= 0)
-		{
-			centerX = 600;
-			redCenterX = 600;
-		}
-		
-		*/
-
-		int dx = centerX - redCenterX;
-		int dy = centerY - redCenterY;
-		
-		// we are using pythagoreas theorem to find the slope part which is the distance between the two objects
-		float distance = sqrt(dx * dx + dy * dy);
-
-		if (distance <= r + redR)  // so each radius is 25, so it needs at least 50 which is both added together, if its more than 50, not touching, less than 50, they are touching
-		{
-			centerX = 600;
-			redCenterX = 600;
-		}
-
+		angle += speed;
 	}
 
-
 	CloseWindow();
+
 }
 
-//a
 
-void TriangleFunc()
+
+void SpiroGraph()
 {
+	int wh = 800; // since width and height are same number, use same variable for both
 
-	int wh = 800;
-	InitWindow(800, 800, "My Cool Game");
-	SetTargetFPS(10);
+	InitWindow(wh, wh, "Spirograph");
+	SetTargetFPS(60);
 
-	Vector2 top = Vector2{ (float)wh / 2,100 };
-	Vector2 left = Vector2{ 100, (float)wh - 100 };
-	Vector2 right = Vector2{ (float)wh - 100, (float)wh - 100 };
+	//set both circles in same spot to set up with one smaller than other so it's inside it
 
-	float r = 20;
+	float xCoordinate = wh / 2;
+	float yCoordinate = wh / 2;
 
-	int isDragging = 0;
+	float outer = 200; // large (outer) circle radius
+	float inner = 75;  // small (outer) circle radius
+	float distance = outer - inner;
+	float innerDrawCircle = 40;
+
+
+	float angle = 0;
+	float speed = 1;
+
+	// adding color choices
+	Color colors[] = { GREEN, PURPLE, ORANGE, PINK, SKYBLUE, GOLD };
+	int colorIndex = 0;
 
 	while (!WindowShouldClose())
 	{
-		Vector2 mouse = GetMousePosition();
-
-		if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
+		// speed controls
+		if (IsKeyPressed(KEY_RIGHT))
 		{
-			// The distance of the mouse position against the top circle
-			float topDist = Vector2Distance(mouse, top);
-			float leftDist = Vector2Distance(mouse, left);
-			float rightDist = Vector2Distance(mouse, right);
-
-
-			/*
-			if (topDist < r)top = mouse;
-			else if (leftDist < r)left = mouse;
-			else if (rightDist < r)right = mouse;
-			*/
-
-			if (topDist < r) isDragging = 1;
-			else if (leftDist < r) isDragging = 2;
-			else if (rightDist < r) isDragging = 3;
-
-			if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) isDragging = 0; 
-			// abcde
-			// a
-			switch (isDragging)
+			speed += 1;
+			angle = 0;
+		}
+		else if (IsKeyPressed(KEY_LEFT))
+		{
+			if (speed > 1)
 			{
+				speed -= 1;
+				angle = 0;
+			}
+		}
+		// if right arrow key is pressed, make faster
+		// if left is pressed, make slower, is already at 1, no more changes possible for slower
 
-			case 1: top = mouse; break;
-			case 2: left = mouse; break;
-			case 3: right = mouse; break;
 
-			default:
-			break;
+		if (IsKeyPressed(KEY_UP))
+		{
+			if (inner + 5 < outer)
+			{
+				inner += 5;
+				distance = outer - inner;
+				angle = 0;
+			}
+		}
+		else if (IsKeyPressed(KEY_DOWN))
+		{
+			if (inner - 5 >= 40)
+			{
+				inner -= 5;
+				distance = outer - inner;
+				angle = 0;
+			}
+		}
+		// up increases size of inner blue circle and down decreases size, adds limits so it never becomes bigger than outer circle
+		// and so it can always work no matter how small or big
+
+		if (IsKeyPressed(KEY_D))
+		{
+			colorIndex++;
+
+			if (colorIndex >= 6)
+			{
+				colorIndex = 0;
 			}
 
+			angle = 0;
 		}
+		else if (IsKeyPressed(KEY_A))
+		{
+			colorIndex--;
 
-		BeginDrawing();
-		ClearBackground(GRAY);
+			if (colorIndex < 0)
+			{
+				colorIndex = 5;
+			}
 
-		DrawTriangleLines(left, right, top, BLACK);
+			angle = 0;
+		}
+		// added controls to change colors and limits so if values goes to far, loop around
 
-		// float gap = 200;
-		DrawCircleV(top, r, BLUE);
-		DrawCircleV(left, r, GREEN);
-		DrawCircleV(right, r, RED);
+		float innerX = xCoordinate + cos(DEG2RAD * angle) * (distance);
+		float innerY = yCoordinate - sin(DEG2RAD * angle) * (distance);
 
-		EndDrawing();
-	}
+		float drawAngle = -(distance) / inner * angle;
+		// tells us how quickly the green dot needs to rotate relative to the blue circle's movement
+		// the negative sign makes its rotation go in the opposite direction
 
+		// now we do for the inner drawing circle!
+		float drawX = innerX + cos(DEG2RAD * drawAngle) * innerDrawCircle;
+		float drawY = innerY - sin(DEG2RAD * drawAngle) * innerDrawCircle;
 
-	CloseWindow();
-}
-
-void ColorAddition()
-{
-
-	int wh = 800;
-	float r = 300;
-
-	InitWindow(800, 800, "My Cool Game");
-	SetTargetFPS(10);
-
-	Vector2 top = Vector2{ (float)wh / 2, r};
-	Vector2 left = Vector2{ r, (float)wh - r };
-	Vector2 right = Vector2{ (float)wh - r, (float)wh - r };
+		// calculate new angle for inner circle for the drawing part
 
 
-	int isDragging = 0;
-
-	while (!WindowShouldClose())
-	{
-		
-		BeginDrawing();
-		ClearBackground(GRAY);
-
-		BeginBlendMode(BLEND_ADDITIVE);
-
-		DrawCircleV(top, r, BLUE);
-		DrawCircleV(left, r, GREEN);
-		DrawCircleV(right, r, RED);
-		EndBlendMode();
-
-		EndDrawing();
-	}
-
-	CloseWindow();
-}
-
-void TestFunc()
-{
-
-
-	InitWindow(800, 800, "My Cool Game");
-	SetTargetFPS(30);
-
-	float r = 50;
-	float x = 400;
-	float y = 400;
-
-	float inc = 1;
-
-	while (!WindowShouldClose())
-	{
 		BeginDrawing();
 		ClearBackground(RAYWHITE);
 
-		DrawCircle(x, y, r, BLUE); // dead center
-		//amb c
-		float angle = 45; 
-		x -= cos(DEG2RAD * angle) * inc; // does degree to radians, DEG2RAD    //  1/2
-		y -= sin(DEG2RAD * angle) * inc; // (root 3) / 2
-		EndDrawing();
-	}
+		float previousX = xCoordinate + distance + innerDrawCircle;
+		float previousY = yCoordinate;
 
-
-	CloseWindow();
-}
-
-
-
-void OctagonFunc()
-{
-
-	int wh = 800;
-	InitWindow(800, 800, "My Cool Game");
-	SetTargetFPS(10);
-
-	float lineDistance = 200;
-
-	/*
-	 
-	float angle = 45;
-	x -= cos(DEG2RAD * angle) * inc; // does degree to radians, DEG2RAD    //  1/2
-	y -= sin(DEG2RAD * angle) * inc; // (root 3) / 2
-	
-	*/
-
-	Vector2 middle = Vector2{ (float)wh / 2, (float)wh / 2 };
-	Vector2 pointOne = Vector2{ ((float)wh / 2) + lineDistance, (float)wh / 2 };
-
-	float angle = 45;
-	float x = (wh / 2) + (cos(DEG2RAD * angle) * lineDistance) ;
-	float y = (wh / 2) - (sin(DEG2RAD * angle) * lineDistance);
-
-	Vector2 pointTwo = Vector2{ x,y };
-
-	// testing for second triangle
-
-
-	Vector2 middle2 = Vector2{ (float)wh / 2, (float)wh / 2 };
-	Vector2 pointOne2 = Vector2{ x,y };
-
-	float angle2 = 90;
-	float x2 = (wh / 2) + (cos(DEG2RAD * angle2) * lineDistance);
-	float y2 = (wh / 2) - (sin(DEG2RAD * angle2) * lineDistance);
-
-	Vector2 pointTwo2 = Vector2{ x2,y2 };
-
-
-	// lets try and make a loop for this, make a new function
-
-
-
-	while (!WindowShouldClose())
-	{
-
-		
-
-		BeginDrawing();
-		ClearBackground(GRAY);
-
-		DrawTriangleLines(middle, pointOne, pointTwo, BLACK);
-		DrawTriangleLines(middle2, pointOne2, pointTwo2, BLACK);
-
-		
-		EndDrawing();
-	}
-
-
-	CloseWindow();
-}
-
-
-
-void OctagonLoopFunc()
-{
-
-	int wh = 800;
-	InitWindow(800, 800, "My Cool Game");
-	SetTargetFPS(10);
-
-	float lineDistance = 200;
-
-	Vector2 pointStorage = Vector2{ 1,1 }; // placeholder numbers, can be anything, they will be overwritten 
-	
-	Vector2 middle = Vector2{ (float)wh / 2, (float)wh / 2 };
-	Vector2 pointOne = Vector2{ ((float)wh / 2) + lineDistance, (float)wh / 2 };
-
-	float angle = 45;
-	float x = (wh / 2) + (cos(DEG2RAD * angle) * lineDistance);
-	float y = (wh / 2) - (sin(DEG2RAD * angle) * lineDistance);
-
-	Vector2 pointTwo = Vector2{ x,y };
-
-	while (!WindowShouldClose())
-	{
-
-
-
-		BeginDrawing();
-		ClearBackground(GRAY);
-
-
-		for (int i = 0; i < 8; i++)
+		for (float i = 0; i < angle; i += 1)
 		{
-			
+			float innerX2 = xCoordinate + cos(DEG2RAD * i) * distance;
+			float innerY2 = yCoordinate - sin(DEG2RAD * i) * distance;
 
+			float drawAngle2 = -distance / inner * i;
 
-			pointStorage = pointTwo;
+			float drawX2 = innerX2 + cos(DEG2RAD * drawAngle2) * innerDrawCircle;
+			float drawY2 = innerY2 - sin(DEG2RAD * drawAngle2) * innerDrawCircle;
 
-			DrawTriangleLines(middle, pointOne, pointTwo, BLACK);
+			DrawLine(previousX, previousY, drawX2, drawY2, colors[colorIndex]);
 
-			pointOne = pointStorage;
-			angle += 45;
-			x = (wh / 2) + (cos(DEG2RAD * angle) * lineDistance);
-			y = (wh / 2) - (sin(DEG2RAD * angle) * lineDistance);
-			pointTwo = Vector2{ x,y };
-
+			previousX = drawX2;
+			previousY = drawY2;
 		}
+		// loop through all previous angles to redraw the spirograph lines
+		// calculate green dot position at each angle and connect it to previous position
+		// save current position as previous for next loop
+		// keeps all lines visible even though background clears every frame
 
 
+		DrawCircleLines(xCoordinate, yCoordinate, outer, RED);
 
-		DrawTriangleLines(middle, pointOne, pointTwo, BLACK);
+		DrawCircleLines(innerX, innerY, inner, BLUE);
+		DrawCircle(drawX, drawY, 5, colors[colorIndex]);
+		// replace green circle code with this now
 
 
 		EndDrawing();
+		angle += speed;
 	}
 
-
 	CloseWindow();
+
 }
 
 int main()
 {
 
-	OctagonLoopFunc();
+	SpiroGraph();
 
 	return 0;
 }
