@@ -1,0 +1,11 @@
+.vs/
+x64/
+**/Debug/
+**/Release/
+**/x64/
+**/bin/
+**/obj/
+*.user
+*.suo
+*.VC.db
+*.VC.opendb
